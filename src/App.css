@@ -1,0 +1,345 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+} */
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* .roboto-<uniquifier> {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+} */
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow:hidden;
+  background-color: #f4f4f4;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+/* Hide arrows in input[type=number] for all browsers */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #dc8585;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f30a0a;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/*========================= header styling ======================*/
+.searchBox input::placeholder{color:black !important;}
+.searchBox .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border: none;
+}
+
+
+.searchBox .MuiInputBase-input {
+  font-size: 18px;   /* Change text size */
+  color: red;   /* Change text color */
+}
+
+.link Button{
+  text-decoration: none;
+  color: black;
+  text-transform: capitalize;
+}
+
+
+
+
+/*========================= header styling ======================*/
+
+/* ===========================hero2 section========================== */
+.swiper-button-next::after, .swiper-button-prev:after{
+  color: rgba(0, 0, 0, 0.5) !important;
+  font-size: 25px !important;
+  z-index: 10 !important;
+  font-weight: 600 !important;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  width: 40px !important;
+  height: 40px !important;
+  background-color: white !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  transition: background-color 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+
+.swiper-button-next:hover, .swiper-button-prev:hover {
+  background-color: rgb(234, 167, 167) !important;
+  color: white !important;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2) !important;
+  transform: scale(1.0) !important;
+  transition: background-color 0.3s ease, transform 0.3s ease !important
+}
+
+/*===========zoom swiper thumb============================*/
+.swiper-slide-thumb-active{
+  opacity:1 !important;
+  border: 2px black solid ;
+}
+/*===========zoom swiper thumb============================*/
+
+/* ===========================hero2 section========================== */
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.adjust {
+  color: rgb(18, 35, 187) !important;
+  background-color: red !important;
+  height: calc(100vh - 64px) !important;
+}
+
+
+.active{
+  color:gold;
+}
+.coloring{
+  color:black;
+}
+
+/*=======================mui slider and checkbox styling=========*/
+
+.css-1xcmt9q-MuiSlider-thumb{
+  height:15px !important;
+  width:15px !important;
+  color: #f30a0a;
+}
+
+.css-xvk2i-MuiSlider-track{
+  border: none !important;
+  background-color: #d57474 !important;
+}
+
+.css-120dh41-MuiSvgIcon-root {
+  fill : #cd4f4f;
+  border: gray;
+}
+
+/*=======================mui slider and checkbox styling=========*/
+
+/*============================image zoomer button==============*/
+.iiz__btn{
+  display: none !important;
+}
+
+.iiz__img{
+  aspect-ratio: 14 / 16; /* width / height */
+  object-fit: cover;   /* or contain, depending on the use case */
+  height: auto;
+}
+/*============================image zoomer button==============*/
+
+/*============================admin header styling=====================*/
+.ring-offset-background {
+     --tw-ring-offset-color: none !important; 
+}
+
+/*============================admin header styling=====================*/
+
+
+/* ===========================sticky component styling */
+/* General Styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Styling for the header */
+.header {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Sticky Class Styling */
+.header.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensures it's on top of other content */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Content Styling */
+.content {
+  padding: 20px;
+}
+
+footer {
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+}
+
+
+
+/* calendar3========================================== */
+/* App.css */
+.App {
+  text-align: center;
+  margin: 20px;
+}
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.calendar-day {
+  padding: 20px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.calendar-day.empty {
+  background-color: #f5f5f5;
+}
+
+.event {
+  background-color: #ffeb3b;
+  padding: 5px;
+  margin-top: 5px;
+  border-radius: 3px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+
+
+
