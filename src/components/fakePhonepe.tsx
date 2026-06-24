@@ -45,7 +45,6 @@ export default function PhonePeClone() {
   >("home");
 
   const [upiId, setUpiId] = useState("");
-  const [card, setCard] = useState("");
   const [otp, setOtp] = useState("");
   const [txId, setTxId] = useState("");
 

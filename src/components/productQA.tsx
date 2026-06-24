@@ -43,6 +43,7 @@ const ProductQA: React.FC<Props> = ({ productId }) => {
       console.error("Fetch QAs Error:", err);
     }
   };
+  console.log("hi")
 
   // ✅ FETCH ON CHANGE
   useEffect(() => {

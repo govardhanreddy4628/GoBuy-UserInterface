@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaRegEyeSlash } from "react-icons/fa6";
-import { FaRegEye } from "react-icons/fa6";
-// import toast from 'react-hot-toast';
-// import Axios from '../utils/Axios';
-// import SummaryApi from '../common/SummaryApi';
-// import AxiosToastError from '../utils/AxiosToastError';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const [data, setData] = useState({
@@ -17,7 +11,7 @@ const ForgotPassword = () => {
     //const location = useLocation().pathname
     const navigate = useNavigate()
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
 
         setData((preve) => {

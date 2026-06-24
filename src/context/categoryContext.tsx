@@ -1,19 +1,13 @@
 // context/categoryContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Category, CategoryFormData } from "../types/category";
+import { Category  } from "../types/category";
 import { GET } from "../api/api_utility";
 
 interface CategoryContextType {
   categories: Category[];
-  addCategory: (data: CategoryFormData) => Promise<Category>;
-  updateCategory: (id: string, data: Partial<CategoryFormData>) => Promise<Category>;
-  deleteCategory: (id: string) => Promise<void>;
   loading: boolean;
   findCategoryById: (id: string, categories?: Category[]) => Category | null;
   getAllCategories: () => Category[];
-  moveSubcategories: (fromId: string, newParentId: string | null) => Promise<void>;
-  checkCategoryHasProducts: (categoryId: string) => Promise<boolean>;
-  moveProductsToCategory: (fromId: string, newCategoryId: string) => Promise<any>;
 }
 
 const CategoryContext = createContext<CategoryContextType | undefined>(undefined);

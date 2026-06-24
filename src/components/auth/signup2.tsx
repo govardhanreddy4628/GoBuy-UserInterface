@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";

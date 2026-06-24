@@ -1,9 +1,25 @@
 import { Button, Grid, TextField } from "@mui/material";
-import { Field, FieldArray, Form, Formik } from "formik";
-// import * as Yup from "Yup";
+import {
+  Field,
+  FieldArray,
+  Form,
+  Formik,
+  FormikErrors,
+  FormikHelpers,
+} from "formik";
+import React from "react";
+
+// ✅ Define form type
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phoneNumbers: string[];
+}
 
 export default function FormikFieldArray() {
-  const initialValues = {
+  const initialValues: FormValues = {
     firstName: "",
     lastName: "",
     fullName: "",
@@ -11,44 +27,38 @@ export default function FormikFieldArray() {
     phoneNumbers: [""],
   };
 
-  // const validationSchema = Yup.Object({});
-
-  const validateEmail = (value) => {
-    let error;
-    if (!value) {
-      error = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(value)) {
-      error = "Invalid email address";
-    }
-    return error;
+  // ✅ Typed email validation
+  const validateEmail = (value: string): string | undefined => {
+    if (!value) return "Email is required";
+    if (!/\S+@\S+\.\S+/.test(value)) return "Invalid email address";
+    return undefined;
   };
 
-  const validateField = (values) => {
-    const errors = {};
+  // ✅ Typed validate function
+  const validateField = (values: FormValues): FormikErrors<FormValues> => {
+    const errors: FormikErrors<FormValues> = {};
 
-    // Validate Email field
-    errors.email = validateEmail(values.email);
+    const emailError = validateEmail(values.email);
+    if (emailError) errors.email = emailError;
 
-    // Add validation logic for other fields if needed
-    if (!values.firstName) {
-      errors.firstName = "First name is required";
-    }
-
-    if (!values.lastName) {
-      errors.lastName = "Last name is required";
-    }
-
-    if (!values.fullName) {
-      errors.fullName = "Full name is required";
-    }
+    if (!values.firstName) errors.firstName = "First name is required";
+    if (!values.lastName) errors.lastName = "Last name is required";
+    if (!values.fullName) errors.fullName = "Full name is required";
 
     return errors;
   };
 
-  const handleSubmit = () => {};
+  // ✅ Typed submit
+  const handleSubmit = (
+    values: FormValues,
+    actions: FormikHelpers<FormValues>
+  ) => {
+    console.log(values);
+    actions.setSubmitting(false);
+  };
 
   return (
-    <Formik
+    <Formik<FormValues>
       initialValues={initialValues}
       validate={validateField}
       onSubmit={handleSubmit}
@@ -64,121 +74,117 @@ export default function FormikFieldArray() {
             width: "100%",
           }}
         >
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-          >
-            {console.log(formik) || null}
-            {console.log(formik.values) || null}
-            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <Grid container spacing={2} justifyContent="center">
+            {/* First Name */}
+            <Grid item xs={6}>
               <Field
                 as={TextField}
                 name="firstName"
-                placeholder="enter firstName"
-                label="firstName"
-                variant="outlined"
+                label="First Name"
                 fullWidth
                 error={Boolean(
-                  formik.errors.firstName && formik.touched.firstName
+                  formik.touched.firstName && formik.errors.firstName
                 )}
-                helperText={formik.errors.firstName && formik.touched.firstName}
-              ></Field>
+                helperText={
+                  formik.touched.firstName && formik.errors.firstName
+                }
+              />
             </Grid>
-            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+
+            {/* Last Name */}
+            <Grid item xs={6}>
               <Field
                 as={TextField}
                 name="lastName"
-                placeholder="enter lastName"
-                label="lastName"
-                variant="outlined"
+                label="Last Name"
                 fullWidth
                 error={Boolean(
-                  formik.errors.lastName && formik.touched.lastName
+                  formik.touched.lastName && formik.errors.lastName
                 )}
-                helperText={formik.errors.lastName && formik.touched.lastName}
-              ></Field>
+                helperText={
+                  formik.touched.lastName && formik.errors.lastName
+                }
+              />
             </Grid>
-            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+
+            {/* Full Name */}
+            <Grid item xs={6}>
               <Field
                 as={TextField}
                 name="fullName"
-                placeholder="enter fullName"
-                label="fullName"
-                variant="outlined"
+                label="Full Name"
                 fullWidth
                 error={Boolean(
-                  formik.errors.fullName && formik.touched.fullName
+                  formik.touched.fullName && formik.errors.fullName
                 )}
-                helperText={formik.errors.fullName && formik.touched.fullName}
-              ></Field>
+                helperText={
+                  formik.touched.fullName && formik.errors.fullName
+                }
+              />
             </Grid>
-            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+
+            {/* Email */}
+            <Grid item xs={6}>
               <Field name="email">
-                {(props) => {
-                  const { field, form, meta } = props;
-                  console.log(form);
-                  console.log(field);
-                  return (
-                    <TextField
-                      {...field} // Spread the field props like value, onChange, onBlur
-                      label="Email"
-                      variant="outlined"
-                      fullWidth
-                      error={Boolean(meta.touched && meta.error)} // Show error if touched and error exists
-                      helperText={meta.touched && meta.error ? meta.error : ""} // Show error message if touched
-                    />
-                  );
-                }}
+                {({field, meta}: {field: any; meta: any}) => (
+                  <TextField
+                    {...field}
+                    label="Email"
+                    fullWidth
+                    error={Boolean(meta.touched && meta.error)}
+                    helperText={meta.touched && meta.error ? meta.error : ""}
+                  />
+                )}
               </Field>
             </Grid>
-            <Grid>
+
+            {/* Phone Numbers */}
+            <Grid item xs={12}>
               <FieldArray name="phoneNumbers">
-                {(props) => {
-                  const { push, remove, form } = props;
-                  console.log(form);
-                  const { phoneNumbers } = form.values;
-                  return (
-                    <>
-                      {phoneNumbers.map((phoneNumber, index) => (
-                        <div key={index}>
-                          <TextField
-                            name={`phoneNumbers[${index}]`}
-                            label="Phone Number"
-                            value={phoneNumber}
-                            onChange={(e) => {
-                              form.setFieldValue(
-                                `phoneNumbers[${index}]`,
-                                e.target.value
-                              );
-                            }}
-                            fullWidth
-                          />
-                          {phoneNumbers.length > 1 && (
-                            <Button
-                              type="button"
-                              disabled={phoneNumbers.length < 2}
-                              onClick={() =>
-                                phoneNumbers.length > 1 && remove(index)
-                              }
-                            >
-                              Remove
-                            </Button>
-                          )}
-                        </div>
-                      ))}
-                      <Button
-                        type="button"
-                        disabled={phoneNumbers.length === 3}
-                        onClick={() => phoneNumbers.length < 3 && push("")}
-                      >
-                        Add Phone Number
-                      </Button>
-                    </>
-                  );
-                }}
+                {({ push, remove }) => (
+                  <>
+                    {formik.values.phoneNumbers.map((phone, index) => (
+                      <div key={index} style={{ marginBottom: 10 }}>
+                        <TextField
+                          label="Phone Number"
+                          value={phone}
+                          fullWidth
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            formik.setFieldValue(
+                              `phoneNumbers[${index}]`,
+                              e.target.value
+                            )
+                          }
+                        />
+
+                        {formik.values.phoneNumbers.length > 1 && (
+                          <Button
+                            type="button"
+                            onClick={() => remove(index)}
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+
+                    <Button
+                      type="button"
+                      disabled={formik.values.phoneNumbers.length === 3}
+                      onClick={() => push("")}
+                    >
+                      Add Phone Number
+                    </Button>
+                  </>
+                )}
               </FieldArray>
+            </Grid>
+
+            {/* Submit */}
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained">
+                Submit
+              </Button>
             </Grid>
           </Grid>
         </Form>

@@ -175,85 +175,122 @@ import { ChatInput } from "./ChatInput";
 import { QuickActions } from "./QuickActions";
 import { TypingIndicator } from "./TypingIndicator";
 import { Trash2, MessageSquare, Headphones } from "lucide-react";
-import { useToast } from "../../hooks/use-toast";
 import { Button } from "../../ui/button";
 import { ScrollArea } from "../../ui/scroll-area";
 import { useAuth } from "../../context/authContext";
+import { BASE_URL } from "../../api/api_utility";
+
+type Message = {
+  id: string;
+  content?: string;
+  text?: string;
+  isUser?: boolean;
+  senderType?: "user" | "AI" | "admin" | "System";
+  timestamp?: Date;
+  streaming?: boolean;
+};
 
 // Production Socket Connection
-const socket: Socket = io(import.meta.env.VITE_BACKEND_URL_LOCAL || "http://localhost:8080");
+const socket: Socket = io(BASE_URL, {
+  transports: ["websocket"], // avoids polling issues in prod
+});
 
 export const Chatbot: React.FC = () => {
-  const [messages, setMessages] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [isHumanAgent, setIsHumanAgent] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  //const { toast } = useToast();
+   const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [isHumanAgent, setIsHumanAgent] = useState<boolean>(false);
+
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
   
   const { user } = useAuth();
-  const userId = user?.id as string | undefined;
+  const userId = user?.id;
 
   useEffect(() => {
+     if (!userId) return;
+
     // 1. Join personal room & fetch history from MongoDB
     socket.emit("join_chat", { userId });
 
-    socket.on("chat_history", (history) => {
-      setMessages(history.map((m: any) => ({
-        id: m._id,
-        content: m.message,
-        isUser: m.sender === "user",
-        senderType: m.sender, // 'user', 'AI', or 'admin'
-        timestamp: new Date(m.createdAt)
-      })));
-    });
+     const handleHistory = (history: any[]) => {
+      setMessages(
+        history.map((m) => ({
+          id: m._id,
+          content: m.message,
+          isUser: m.sender === "user",
+          senderType: m.sender,
+          timestamp: new Date(m.createdAt),
+        }))
+      );
+    };
 
     // 2. Listen for real-time replies (from AI or Admin)
-    socket.on("receive_message", (data) => {
-      if (data.sender === "System" && data.message.includes("human agent")) {
+     const handleReceive = (data: any) => {
+      if (
+        data.sender === "System" &&
+        data.message?.includes("human agent")
+      ) {
         setIsHumanAgent(true);
       }
 
-      setMessages((prev) => [...prev, {
-        id: Date.now().toString(),
-        content: data.message,
-        isUser: data.sender === "user",
-        senderType: data.sender,
-        timestamp: new Date()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          content: data.message,
+          isUser: data.sender === "user",
+          senderType: data.sender,
+          timestamp: new Date(),
+        },
+      ]);
+
       setIsTyping(false);
       setIsLoading(false);
-    });
+    };
 
-    socket.on("ai_typing", () => setIsTyping(true));
+    const handleTyping = () => setIsTyping(true);
 
-    socket.on("ai_message_chunk", ({ chunk }) => {
-      setMessages(prev => {
+     const handleChunk = ({ chunk }: { chunk: string }) => {
+      setMessages((prev) => {
         const last = prev[prev.length - 1];
 
-        if (last && last.streaming) {
-          last.text += chunk;
-          return [...prev];
+        if (last?.streaming) {
+          return prev.map((m, i) =>
+            i === prev.length - 1
+              ? { ...m, text: (m.text || "") + chunk }
+              : m
+          );
         }
 
-        return [...prev, { role: "assistant", text: chunk, streaming: true }];
-      });
-    });
+        return [
+          ...prev,
+          { id: Date.now().toString(), text: chunk, streaming: true },
+        ];
+      })
+    }
 
-     socket.on("ai_message_done", () => {
+      const handleDone = () => {
       setIsTyping(false);
-      setMessages(prev =>
-        prev.map(m => (m.streaming ? { ...m, streaming: false } : m))
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.streaming ? { ...m, streaming: false } : m
+        )
       );
-    });
+    };
+
+   socket.on("chat_history", handleHistory);
+    socket.on("receive_message", handleReceive);
+    socket.on("ai_typing", handleTyping);
+    socket.on("ai_message_chunk", handleChunk);
+    socket.on("ai_message_done", handleDone);
 
     return () => {
-      socket.off("receive_message");
-      socket.off("chat_history");
-      socket.off("ai_typing");
-      socket.off("ai_message_chunk");
-      socket.off("ai_message_done");
+      socket.off("chat_history", handleHistory);
+      socket.off("receive_message", handleReceive);
+      socket.off("ai_typing", handleTyping);
+      socket.off("ai_message_chunk", handleChunk);
+      socket.off("ai_message_done", handleDone);
     };
   }, [userId]);
 

@@ -146,39 +146,3 @@ const ProductQA: React.FC<{ productId: string }> = ({ productId }) => {
 };
 
 export default ProductQA;
-
-
-
-
-
-
-
-
-const initialQAs: QA[] = [
-  {
-    id: 1,
-    question: "Does this product come in red color?",
-    answer:
-      "Yes, it is available in red color and other colors as well for variety.",
-  },
-  {
-    id: 2,
-    question: "Is there a warranty?",
-    answer: "Yes, 1-year warranty is provided covering manufacturing defects.",
-  },
-  {
-    id: 3,
-    question: "What is the delivery time?",
-    answer: "Delivery usually takes 5-7 business days depending on your location.",
-  },
-  {
-    id: 4,
-    question: "Is cash on delivery available?",
-    answer: "Yes, cash on delivery is available in selected locations.",
-  },
-  {
-    id: 5,
-    question: "Does this product require assembly?",
-    answer: "",
-  },
-];

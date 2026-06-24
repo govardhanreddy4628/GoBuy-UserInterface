@@ -24,7 +24,7 @@ import ProductInfo from "./productInfo2";
 import RatingStats from "./ratingStats";
 import ReviewList from "./reviewList";
 import ProductQA from "./productQA";
-import { POST } from "../api/api_utility";
+import { GET, POST } from "../api/api_utility";
 import ProductsSlider from "./productsSlider";
 import ProductQuickViewModal from "./ProductQuickViewModal";
 import AiChatModal from "./aiChatModal/aiChatModal";
@@ -133,8 +133,8 @@ const ProductDetails2 = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await axios.get(
-                    `${import.meta.env.VITE_BACKEND_URL_LOCAL}/api/v1/product/getproductdetails/${id}`
+                const res = await GET(
+                    `/api/v1/product/getproductdetails/${id}`
                 );
 
                 if (res.data?.success && res.data?.data) {
@@ -150,9 +150,8 @@ const ProductDetails2 = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/v1/reviews?productId=${id}`)
-            .then(res => res.json())
-            .then(data => setStats(data.stats));
+        GET(`/api/v1/reviews?productId=${id}`)
+            .then(data => setStats(data.data.stats));
     }, [id]);
     console.log("stats", stats)
 
@@ -192,14 +191,9 @@ const ProductDetails2 = () => {
         // ✅ 2. BACKEND SYNC (COOKIE BASED AUTH)
         // OPTIONAL: only if logged in
         if (isAuthenticated !== false) {
-            fetch(
-                `${import.meta.env.VITE_BACKEND_URL_LOCAL}/api/v1/product/add-recently-viewed/${product._id}`,
-                {
-                    method: "POST",
-                    credentials: "include", // 🔥 REQUIRED for cookies
-                }
-            ).catch(() => {
-                // silently ignore
+            POST(`/api/v1/product/add-recently-viewed/${product._id}`)
+            .catch(() => {
+                
             });
         }
     }, [product?._id]);
@@ -224,67 +218,67 @@ const ProductDetails2 = () => {
                 <div className="flex w-[95%] justify-center p-5 dark:bg-gray-800 gap-8">
 
                     {/* ================= IMAGE COLUMN (STICKY) ================= */}
-<div className="w-[45%]">
-  <div className="sticky top-24 flex items-center gap-4 
+                    <div className="w-[45%]">
+                        <div className="sticky top-24 flex items-center gap-4 
       bg-gray-50 dark:bg-gray-900 py-5 pl-4 rounded-xl 
       max-h-[550px] transition-colors duration-300">
 
-    {/* Thumbs */}
-    <div className="col1.1 w-24 h-[460px] lg:h-[500px]">
-      <Swiper
-        direction="vertical"
-        navigation={images.length > 4}
-        spaceBetween={15}
-        slidesPerView="auto"
-        freeMode
-        onSwiper={setThumbsSwiper}
-        modules={[FreeMode, Navigation, Thumbs]}
-        className="verticalSwiper h-full"
-      >
-        {images.map((src, i) => (
-          <SwiperSlide
-            key={i}
-            className="!w-full !h-[80px] p-1 opacity-70 cursor-pointer group rounded-md overflow-hidden"
-          >
-            <img
-              src={getCloudinaryImage(src, { width: 100, height: 100 })}
-              alt={`Slide ${i + 1}`}
-              className="w-full h-full object-cover transition-all group-hover:scale-105 rounded-sm"
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+                            {/* Thumbs */}
+                            <div className="col1.1 w-24 h-[460px] lg:h-[500px]">
+                                <Swiper
+                                    direction="vertical"
+                                    navigation={images.length > 4}
+                                    spaceBetween={15}
+                                    slidesPerView="auto"
+                                    freeMode
+                                    onSwiper={setThumbsSwiper}
+                                    modules={[FreeMode, Navigation, Thumbs]}
+                                    className="verticalSwiper h-full"
+                                >
+                                    {images.map((src, i) => (
+                                        <SwiperSlide
+                                            key={i}
+                                            className="!w-full !h-[80px] p-1 opacity-70 cursor-pointer group rounded-md overflow-hidden"
+                                        >
+                                            <img
+                                                src={getCloudinaryImage(src, { width: 100, height: 100 })}
+                                                alt={`Slide ${i + 1}`}
+                                                className="w-full h-full object-cover transition-all group-hover:scale-105 rounded-sm"
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
 
-    {/* Main Image */}
-    <div className="col2 w-[76%] h-[500px] ml-4 flex items-center justify-center">
-      <Swiper
-        spaceBetween={0}
-        slidesPerView={1}
-        navigation
-        thumbs={{ swiper: thumbsSwiper }}
-        modules={[FreeMode, Navigation, Thumbs]}
-        className="mySwiper2 overflow-x-hidden rounded-lg w-full h-full flex-1"
-      >
-        {images.map((src) => (
-          <SwiperSlide key={src} className="!flex items-center justify-center">
-            <InnerImageZoom
-              src={src}
-              zoomType="hover"
-              zoomPreload
-              className="object-cover w-full h-full align-middle"
-              alt="Primary product image"
-              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                e.currentTarget.src =
-                  "https://i5.walmartimages.com/asr/d37e7bbd-6700-46a…ad.jpeg";
-              }}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
-  </div>
-</div>
+                            {/* Main Image */}
+                            <div className="col2 w-[76%] h-[500px] ml-4 flex items-center justify-center">
+                                <Swiper
+                                    spaceBetween={0}
+                                    slidesPerView={1}
+                                    navigation
+                                    thumbs={{ swiper: thumbsSwiper }}
+                                    modules={[FreeMode, Navigation, Thumbs]}
+                                    className="mySwiper2 overflow-x-hidden rounded-lg w-full h-full flex-1"
+                                >
+                                    {images.map((src) => (
+                                        <SwiperSlide key={src} className="!flex items-center justify-center">
+                                            <InnerImageZoom
+                                                src={src}
+                                                zoomType="hover"
+                                                zoomPreload
+                                                className="object-cover w-full h-full align-middle"
+                                                alt="Primary product image"
+                                                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                                    e.currentTarget.src =
+                                                        "https://i5.walmartimages.com/asr/d37e7bbd-6700-46a…ad.jpeg";
+                                                }}
+                                            />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* ================= PRODUCT INFO (UNCHANGED) ================= */}
                     <div className="product-content w-full lg:w-[45%] lg:pr-5 
@@ -441,7 +435,7 @@ const ProductDetails2 = () => {
                                 </button>
                             </div>
 
-                            <ProductInfo rating={product.rating} totalreviwes={stats?.totalReviews}/>
+                            <ProductInfo rating={product.rating} totalreviwes={stats?.totalReviews} />
                         </div>
                     </div>
                 </div>

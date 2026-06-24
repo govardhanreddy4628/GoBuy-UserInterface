@@ -10,9 +10,6 @@ import { useCart } from "../../context/cartContext";
 
 /* ================= Validation schema =================== */
 const LoginSchema = Yup.object({
-  role: Yup.string()
-    .oneOf(["user", "admin"])
-    .required("Role is required"),
   email: Yup.string()
     .email("Invalid email")
     .required("Email is required"),
@@ -25,20 +22,14 @@ const DEMO_USER = {
   password: "123456",
 };
 
-const DEMO_ADMIN = {
-  email: "adminexplorer@gmail.com",
-  password: "123456",
-};
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showDemoModal, setShowDemoModal] = useState(true);
 
   const [form, setForm] = useState({
-    role: "user",
-    email: "",
-    password: "",
+    email: DEMO_USER.email,
+    password: DEMO_USER.password,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,20 +61,14 @@ const Login = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 🔥 Fill based on role (FIXED)
-  const fillDemo = (role: "user" | "admin") => {
-    const creds = role === "admin" ? DEMO_ADMIN : DEMO_USER;
-
+  // Demo autofill (user only)
+  const fillDemo = () => {
     setForm({
-      role,
-      email: creds.email,
-      password: creds.password,
+      email: DEMO_USER.email,
+      password: DEMO_USER.password,
     });
-
-    setShowDemoModal(false);
-    toast.success(`${role.toUpperCase()} demo loaded 🚀`);
-  };
-
+    toast.success("Test User credentials loaded 🚀");
+  }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!(await validate())) return;
@@ -102,12 +87,8 @@ const Login = () => {
 
       sessionStorage.removeItem("didLogout");
       toast.success(res.data?.message || "Login successful");
-
-      const role = user.role.toUpperCase();
-
-      navigate(role === "ADMIN" ? "/dashboard" : "/", {
-        replace: true,
-      });
+      navigate( "/", { replace: true });
+      
     } catch (err) {
       const error = err as any;
       const message =
@@ -129,71 +110,6 @@ const Login = () => {
   /* ====================== UI ====================== */
   return (
     <>
-      {/* ================= DEMO MODAL ================= */}
-      {showDemoModal && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setShowDemoModal(false)} // ✅ outside click
-        >
-          <div
-            className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-[90%] max-w-md shadow-xl relative text-gray-800 dark:text-gray-100"
-            onClick={(e) => e.stopPropagation()} // ✅ prevent close when clicking inside
-          >
-            {/* ❌ Close button */}
-            <button
-              onClick={() => setShowDemoModal(false)}
-              className="absolute top-3 right-3 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white text-lg"
-            >
-              ✕
-            </button>
-
-            <h2 className="text-xl font-bold mb-2 text-center">
-              🚀 Quick Explore
-            </h2>
-
-            <p className="text-gray-600 dark:text-gray-400 text-center mb-4">
-              Skip email verification using demo accounts
-            </p>
-
-            {/* USER DEMO */}
-            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg text-sm mb-3">
-              <p className="font-semibold">👤 User Demo</p>
-              <p>Email: {DEMO_USER.email}</p>
-              <p>Password: {DEMO_USER.password}</p>
-              <button
-                onClick={() => fillDemo("user")}
-                className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-1.5 rounded-md"
-              >
-                Use User Demo
-              </button>
-            </div>
-
-            {/* ADMIN DEMO */}
-            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg text-sm mb-3">
-              <p className="font-semibold">🛠 Admin Demo</p>
-              <p>Email: {DEMO_ADMIN.email}</p>
-              <p>Password: {DEMO_ADMIN.password}</p>
-              <button
-                onClick={() => fillDemo("admin")}
-                className="mt-2 w-full bg-black dark:bg-white dark:text-black hover:opacity-90 text-white py-1.5 rounded-md"
-              >
-                Use Admin Demo
-              </button>
-            </div>
-
-            <button
-              onClick={() => setShowDemoModal(false)}
-              className="w-full border border-gray-300 dark:border-gray-700 py-2 rounded-md font-semibold mt-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Login / Signup
-            </button>
-
-            <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-3">
-              You can also explore products without logging in.
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* ================= LOGIN FORM ================= */}
       <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 px-4">
@@ -212,43 +128,11 @@ const Login = () => {
             {/* DEMO BUTTON */}
             <button
               type="button"
-              onClick={() => fillDemo(form.role as "user" | "admin")}
+              onClick={fillDemo}
               className="w-full border border-dashed border-gray-400 dark:border-gray-600 py-2 rounded-md text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition"
             >
-              ⚡ Use {form.role === "admin" ? "Admin" : "User"} Demo
+              ⚡ Use Test Credentials
             </button>
-
-            {/* ROLE SWITCH */}
-            <div className="relative w-64 mx-auto bg-gray-100 dark:bg-gray-700 rounded-xl flex p-1 shadow-inner">
-              <div
-                className={`absolute h-10 w-1/2 bg-white dark:bg-gray-900 rounded-lg shadow-md transition-transform duration-300 ${form.role === "user"
-                    ? "translate-x-0"
-                    : "translate-x-full"
-                  }`}
-              />
-
-              <button
-                type="button"
-                onClick={() => setForm({ ...form, role: "user" })}
-                className={`flex-1 z-10 py-2.5 font-semibold text-sm transition ${form.role === "user"
-                    ? "text-gray-900 dark:text-white"
-                    : "text-gray-500 dark:text-gray-300"
-                  }`}
-              >
-                User
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setForm({ ...form, role: "admin" })}
-                className={`flex-1 z-10 py-2.5 font-semibold text-sm transition ${form.role === "admin"
-                    ? "text-gray-900 dark:text-white"
-                    : "text-gray-500 dark:text-gray-300"
-                  }`}
-              >
-                Admin
-              </button>
-            </div>
 
             {/* EMAIL */}
             <div>
@@ -279,6 +163,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   value={form.password}
                   onChange={handleChange}
+                  placeholder="enter password"
                   className="flex-1 bg-transparent text-gray-900 dark:text-gray-100 outline-none"
                 />
                 <button

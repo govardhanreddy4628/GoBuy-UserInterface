@@ -12,9 +12,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // import FormikFieldArray from './components/formArray';
 
 import { ThemeProvider } from './context/themeContext';
-import ProductDetails from "./components/productDetails";
 //import NotFound from "./pages/NotFound";
-import Productcategory from "./components/mockproductcategory.tsx";
 import BlogDetail from "./components/blogs/BlogDetails.tsx";
 import BlogSection from "./components/blogs/BlogSection.tsx";
 //import { Dashboard } from "./components/admin/DashBoard/dashboard.tsx";
@@ -44,7 +42,6 @@ const Checkout = lazy(() => import("./pages/Checkout.tsx"));
 import OrderConfirmation from "./pages/OrderConfirmation.tsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AdminRoute from "./routes/AdminRoute.tsx";
 const CartPage = lazy(() => import("./pages/cartPage.tsx"));
 
 import PhonePeClone from "./components/fakePhonepe.tsx";
@@ -56,7 +53,6 @@ import Loader from './ui/Loader.tsx';
 import TrackOrder from './pages/trackOrderPage.tsx';
 import PaymentPage from './pages/paymentPage.tsx';
 import { CategoryProvider } from './context/categoryContext.tsx';
-import { CustomerProvider } from './components/context/customerContext.tsx';
 //import { ProductProvider } from "./components/admin/context/productsContext.tsx";
 //import Counter from "./move/counter.tsx";
 
@@ -86,10 +82,9 @@ const App = () => {
         <Route index element={<Hero/>} />
       </Route>
       <Route path='formikfieldarray' element={<FormikFieldArray/>}></Route>
-      <Route path='sticky' element={<Sticky/>}></Route>
       <Route path='calendar2' element={<Calendar2/>}></Route>
       <Route path='calendar3' element={<Calendar3/>}></Route>
-      <Route path='drawCircle' element={<DrawCircle/>}></Route>
+
 
               {/* <Route element={<ProtectedRoute />}> */}
                       {/* <Route path='/' element={<Header />}></Route> */}
