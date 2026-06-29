@@ -1,13 +1,11 @@
 import { Navigation, Pagination, Keyboard } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Button } from '@mui/material';
 import { useState } from 'react';
 import "./secondarySlider.css"
 import banner1 from '../assets/banners2/banner1.png';
 import banner2 from '../assets/banners2/banner2.png';
 import banner3 from '../assets/banners2/banner3.png';
 import banner4 from '../assets/banners2/banner4.png';
-import banner5 from '../assets/banners2/banner5.png';
 
 
 const MyImageFallback = () => (
@@ -32,7 +30,6 @@ const SafeImage = ({ src, alt, fallback: FallbackComponent, ...props }: SafeImag
 };
 
 const SecondarySlider = () => {
-
     return (
         <section className='py-2'>
             <div className='flex lg:flex-row flex-col w-[95%] mx-auto gap-4 items-center'>

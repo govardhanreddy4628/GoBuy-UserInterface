@@ -21,14 +21,14 @@ const ProductQA: React.FC<{ productId: string }> = ({ productId }) => {
   const fetchQAs = async (reset = false) => {
     const res = await GET(`/api/v1/product-qa?productId=${productId}&page=${reset ? 1 : page}&search=${search}`);
 
-    if (res.success) {
+    if (res.data.success) {
       if (reset) {
         setQAs(res.data);
       } else {
         setQAs((prev) => [...prev, ...res.data]);
       }
 
-      setHasMore(qas.length + res.data.length < res.total);
+      setHasMore(qas.length + res.data.length < res.data.total);
     }
   };
 
@@ -48,7 +48,7 @@ const ProductQA: React.FC<{ productId: string }> = ({ productId }) => {
     if (!newQuestion.trim()) return;
 
     const data = await POST(`/api/v1/product-qa/ask`,{ productId, question: newQuestion });
-    if (data.success) {
+    if (data.data.success) {
       setQAs((prev) => [data.data, ...prev]);
       setNewQuestion("");
     }
@@ -58,7 +58,7 @@ const ProductQA: React.FC<{ productId: string }> = ({ productId }) => {
   const handleHelpful = async (qaId: string) => {
     const data = await POST( `/api/v1/product-qa/helpful`,{ qaId });
 
-    if (data.success) {
+    if (data.data.success) {
       setQAs((prev) =>
         prev.map((q) => (q._id === qaId ? data.data : q))
       );

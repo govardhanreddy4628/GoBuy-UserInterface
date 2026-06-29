@@ -1,3 +1,4 @@
+import React from "react";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -8,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, IconButton, CircularProgress } from "@mui/material";
 import { truncateWords } from "../helpers";
 import { useWishlist } from "../context/wishlistContext";
-import { useState } from "react";
+import { IproductImage } from "../types/product";
 
 interface Product {
   _id: string;
@@ -19,12 +20,14 @@ interface Product {
   listedPrice: number;
   discountPercentage: number;
   rating: number;
-  images: any[];
+  images: IproductImage[];
 }
 
 interface Props {
   product: Product;
   item: any;
+  cartKey: string;
+  isWishlisted: boolean;
   handleAdd: (product: Product) => void;
   handleIncrease: (productId: string) => void;
   handleDecrease: (productId: string) => void;
@@ -36,6 +39,8 @@ interface Props {
 const ProductCard = ({
   product,
   item,
+  cartKey,
+  isWishlisted,
   handleAdd,
   handleIncrease,
   handleDecrease,
@@ -44,27 +49,20 @@ const ProductCard = ({
   loadingCartItems = {}
 }: Props) => {
   const navigate = useNavigate();
-  const { wishlist, toggleWishlist } = useWishlist();
-  const [loadingId, setLoadingId] = useState<string | null>(null);
-  
-
-  const isWishlisted = Array.isArray(wishlist) &&
-    wishlist.some((p: any) => p?._id === product._id);
-  console.log("isWishlisted:", isWishlisted) // ✅ DEBUGGING
-
+  const { toggleWishlist, wishListToggleLoading } = useWishlist();
   const inCart = !!item;
   const qty = item?.quantity || 0;
-  const key = `${product._id}__`;
-  const isLoading = loadingCartItems?.[key] || false;
+  const isLoading = loadingCartItems?.[cartKey] || false;
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-400 shadow-md rounded-md flex flex-col items-center relative overflow-hidden">
-      <div className="bg-white w-full flex items-center justify-center border-1 border-gray-200 relative group">
+      <div className="w-full flex items-center justify-center border-1 border-gray-200 relative group">
         <Link
           to={`/productdetails/${product._id}`}
           className="w-full h-[200px] relative overflow-hidden"
         >
           <img
             src={product.images?.[0]?.url || "/placeholder.png"}
+            alt={product.name}
             className="w-full opacity-100 hover:opacity-0 transition duration-500"
           />
 
@@ -80,20 +78,15 @@ const ProductCard = ({
         <div className={`absolute right-[10px] flex flex-col gap-[5px] p-1 transition-all z-50 duration-400
          ${isWishlisted ? "top-[10px]" : "-top-[100%] group-hover:top-[10px]"}`}
         >
-          <div title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"} 
-            onClick={async () => {
-              if (!product) return;
-              setLoadingId(product._id);
-              await toggleWishlist(product);
-              setLoadingId(null);
-            }}
+          <div title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+            onClick={() => toggleWishlist(product)}
             className={`h-[35px] w-[35px] rounded-full flex items-center justify-center cursor-pointer transition-all
             ${isWishlisted
                 ? "bg-red-500 text-white"
                 : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-red-500 hover:text-white"
               }`}
           >
-            {loadingId === product._id ? (
+            {wishListToggleLoading === product._id ? (
               <CircularProgress size={18} className="text-white" />
             ) : (
               <FaRegHeart />
@@ -116,7 +109,7 @@ const ProductCard = ({
         </div>
       </div>
 
-      <div className="info flex flex-col itms-center hustify-center w-full p-3">
+      <div className="info flex flex-col w-full p-3">
         <h6 className="text-[14px] font-[600] capitalize mt-2 line-clamp-2 overflow-hidden">
           <Link to={`/productdetails/${product._id}`} className="link">
             {product.name}
@@ -196,4 +189,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

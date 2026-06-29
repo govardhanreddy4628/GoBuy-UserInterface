@@ -9,14 +9,15 @@ import { useAuth } from "../context/authContext";
 import { Box } from "@mui/material";
 import { Product } from "../types/product";
 import SkeletonCard from "./SkeletonProductCard";
-import { BASE_URL, GET, POST } from "../api/api_utility";
+import { GET, POST } from "../api/api_utility";
+import { useWishlist } from "../context/wishlistContext";
 
 type Props = {
   handleClickOpen: (product: Product) => void;
   handleOpenAiChat: (product: Product) => void;
   headerName?: string;
   route?: string;
-  categorySlug?: string; // ✅ NEW
+  categorySlug?: string; 
 };
 
 const ProductsSlider = ({
@@ -31,6 +32,10 @@ const ProductsSlider = ({
 
   const { isAuthenticated } = useAuth();
   const { cart, addToCart, updateQuantity, loadingCartItems, getCartKey } = useCart();
+  const { wishlist } = useWishlist();
+
+  // ✅ fast lookup (VERY IMPORTANT)
+  const wishlistIds = new Set(wishlist.map((p: any) => p._id));
 
   // =============== FETCH PRODUCTS (UNIFIED)  ============
   useEffect(() => {
@@ -52,25 +57,12 @@ const ProductsSlider = ({
             const localIds: string[] = stored ? JSON.parse(stored) : [];
 
             if (localIds.length > 0) {
-              await fetch(
-                `http://localhost:8080/api/v1/product/merge-recently-viewed`,
-                {
-                  method: "POST",
-                  credentials: "include",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ ids: localIds }),
-                }
-              );
+              await POST(`/api/v1/product/merge-recently-viewed`, { ids: localIds });
               localStorage.removeItem("recentlyViewed");
             }
 
-            const res = await fetch(
-              `http://localhost:8080/api/v1/product/recently-viewed`,
-              { credentials: "include" }
-            );
-
-            const data = await res.json();
-            setProducts(data.success ? data.data : []);
+            const res = await GET(`/api/v1/product/recently-viewed`);
+            setProducts(res.data.success ? res.data.data : []);
           } else {
             const stored = localStorage.getItem("recentlyViewed");
             const ids: string[] = stored ? JSON.parse(stored) : [];
@@ -177,6 +169,8 @@ const ProductsSlider = ({
                   <ProductCard
                     product={product}
                     item={item}
+                    cartKey={key}
+                    isWishlisted={wishlistIds.has(product._id)} 
                     handleAdd={handleAdd}
                     handleIncrease={() => handleIncrease(key)}
                     handleDecrease={() => handleDecrease(key)}

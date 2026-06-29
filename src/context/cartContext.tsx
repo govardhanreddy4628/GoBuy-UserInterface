@@ -158,10 +158,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // ------------------ UPDATE QUANTITY ------------------
-  const updateQuantity = async (
-    key: string,
-    action: "inc" | "dec"
-  ) => {
+  const updateQuantity = async (key: string, action: "inc" | "dec") => {
     const item = cart[key];
     if (!item) return;
 

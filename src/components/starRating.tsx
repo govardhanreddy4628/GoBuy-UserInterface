@@ -5,29 +5,17 @@ export default function StarRating() {
   const [hover, setHover] = useState(0);
   const stars = Array(5).fill("*");
 
-  const handleClick = (i:number) => {
-    setRating(i + 1);
-  };
-
-  const handleMouseOver = (i:number) => {
-    setHover(i + 1);
-  };
+  const handleClick = (i:number) => {setRating(i + 1)};
+  const handleMouseOver = (i:number) => {setHover(i + 1)};
 
   return (
     <div style={{display:"flex", justifyContent:"center", alignItems:"center", height:"50px", width:"100%"}}>
       <div style={{width:"auto", height:"auto"}}>
-      {stars.map((el, i) => (
-        <div
-          key={i}
-          style={{
-          
-            display:"inline-block",
-            
-          }}
-        >
+      {stars.map((i) => (
+        <div key={i} style={{display:"inline-block"}}>
           <div
             className={
-              i<(rating&&hover ) || i<hover 
+              i<(rating && hover ) || i<hover 
                 ? "active"
                 : "coloring"
             }
@@ -40,8 +28,7 @@ export default function StarRating() {
           </div>
         </div>
       ))}
-      </div>
-      
+      </div>      
     </div>
   );
 }

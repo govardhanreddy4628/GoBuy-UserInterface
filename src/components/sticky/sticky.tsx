@@ -1,4 +1,3 @@
-import React from "react";
 import useSticky from "../../hooks/useSticky";
 
 // Main App Component

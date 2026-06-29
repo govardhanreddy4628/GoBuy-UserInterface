@@ -16,15 +16,15 @@ import Pagination from "@mui/material/Pagination";
 
 import ProductCard from "./productCard";
 import { useCart } from "../context/cartContext";
-import api from "../api/api_utility";
-import { truncateWords } from "../helpers";
+import api, { GET } from "../api/api_utility";
+//import { truncateWords } from "../helpers";
 import ProductQuickViewModal from "./ProductQuickViewModal";
 import { IoClose } from "react-icons/io5";
 import { RiRobot2Line } from "react-icons/ri";
 import AiChatModal from "./aiChatModal/aiChatModal";
 import SkeletonCard from "./SkeletonProductCard";
 import { useCategories } from "../context/categoryContext";
-
+import { IproductImage } from "../types/product";
 
 interface Product {
   _id: string;
@@ -35,7 +35,7 @@ interface Product {
   listedPrice: number;
   discountPercentage: number;
   rating: number;
-  images: any[];
+  images: IproductImage[];
 }
 
 const sortLabels: Record<string, string> = {
@@ -183,12 +183,12 @@ const Productcategory = () => {
           query.append("brands", filters.brands.join(","));
         }
 
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL_LOCAL}/api/v1/product?${query}`,
+        const res = await GET(
+          `/api/v1/product?${query}`,
           { signal: controller.signal }
         );
 
-        const data = await res.json();
+        const data = res.data;
 
         if (data.success) {
           setProducts(data.data || []);

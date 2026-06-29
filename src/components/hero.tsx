@@ -9,7 +9,6 @@ import SecondarySlider from './secondarySlider';
 import { useState } from 'react';
 //import { GoGitCompare } from "react-icons/go";
 import ProductsSlider from './productsSlider';
-import banner1 from '../assets/seconderybanners/banner1.webp';
 import banner2 from '../assets/seconderybanners/banner2.webp';
 import banner3 from '../assets/seconderybanners/banner3.webp';
 import banner4 from '../assets/seconderybanners/banner4.webp';
@@ -72,7 +71,7 @@ const Hero = () => {
                                 FREE SHIPPING
                             </h1>
                         </div>
-                        <p className="text-[16px] md:text-[17px] text-[rgba(0,0,0,0.8)] dark:text-white text-gray-700 dark:text-gray-200 text-center md:text-left max-w-[320px]">
+                        <p className="text-[16px] md:text-[17px] text-[rgba(0,0,0,0.8)] dark:text-white text-gray-700  text-center md:text-left max-w-[320px]">
                             Free Delivery Now On Your First Order and over ₹400
                         </p>
                         <h1 className="font-extrabold text-[28px] md:text-[32px] text-gray-700 dark:text-white tracking-tight">

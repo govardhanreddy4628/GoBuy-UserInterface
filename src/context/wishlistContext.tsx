@@ -22,7 +22,7 @@ export const WishlistProvider = ({ children }: any) => {
   const fetchWishlist = async () => {
     setWishlistLoading(true);
     try {
-      const response = await GET("api/v1/wishlist");
+      const response = await GET("/api/v1/wishlist");
 
       const res = response.data; // 🔥 IMPORTANT FIX
 
@@ -50,7 +50,7 @@ export const WishlistProvider = ({ children }: any) => {
   const toggleWishlist = async (product: any) => {
     setWishlistToggleLoading(product._id);
     try {
-      const response = await POST("api/v1/wishlist/toggle", {
+      const response = await POST("/api/v1/wishlist/toggle", {
         productId: product._id,
       });
 

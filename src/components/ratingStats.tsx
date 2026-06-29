@@ -77,7 +77,6 @@ const StarRating = ({
   );
 };
 
-
 type RatingStatsProps = {
   average: number;
   totalReviews: number;
@@ -85,7 +84,6 @@ type RatingStatsProps = {
   productId: string;
   //verifiedCount?: number;
 };
-
 
 const RatingStats: React.FC<RatingStatsProps> = ({
   average,
@@ -172,7 +170,7 @@ const RatingStats: React.FC<RatingStatsProps> = ({
         },
       });
 
-      if (!res.ok) { throw new Error("Failed to submit review") }
+      if (!res.data.ok) { throw new Error("Failed to submit review") }
       alert("Review submitted successfully");
 
       // Reset

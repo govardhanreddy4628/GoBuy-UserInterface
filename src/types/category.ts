@@ -18,6 +18,7 @@ export interface Category {
   image?: ImageMetadata; // ✅ Use the new type here
   parentCategoryId?: string | null;
   subcategories: Category[];
+  isActive?: boolean;
   createdAt: Date;
   createdBy?: string;
   updatedAt: Date;

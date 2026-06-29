@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import "./aiChatModal.css";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { POST } from "../../api/api_utility";
 
 interface Props {
   product: any;
@@ -64,11 +64,7 @@ function AiChatModal({ product, onClose }: Props) {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL_LOCAL}/api/v1/product/ask`,
-        { query: userMessage, productId: product._id },
-      );
-
+      const res = await POST(`/api/v1/product/ask`, { query: userMessage, productId: product._id });
       const answer = res.data?.answer || "No answer returned.";
       typeMessage(answer);
     } catch (error) {
@@ -78,7 +74,6 @@ function AiChatModal({ product, onClose }: Props) {
       setLoading(false);
     }
   };
-
 
   return (
     // 🔥 BACKDROP
