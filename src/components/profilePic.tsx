@@ -1,23 +1,39 @@
-import { toast } from 'react-toastify';
+import toast from "react-hot-toast";
+import { PUT } from "../api/api_utility"; // adjust path
 
-const ProfilePic = async (file) => {
-  const formData = new FormData();
-  formData.append('profilePic', file);
+interface ProfilePicResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    profilePicUrl: string;
+  };
+}
 
-  const response = await fetch('/api/user/profile-pic', {
-    method: 'PUT',
-    body: formData,
-    headers: {
-      Authorization: `Bearer ${token}`, // token from login
-    },
-  });
+const uploadProfilePic = async (file: File): Promise<void> => {
+  try {
+    const formData = new FormData();
+    formData.append("profilePic", file);
 
-  const result = await response.json();
-  if (result.success) {
-    toast.success("Profile picture updated!");
-  } else {
-    toast.error(result.message);
+    const response = await PUT<ProfilePicResponse>(
+      "/api/user/profile-pic",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (response.data.success) {
+      toast.success("Profile picture updated!");
+    } else {
+      toast.error(response.data.message);
+    }
+  } catch (error: any) {
+    toast.error(
+      error?.response?.data?.message || "Failed to upload profile picture"
+    );
   }
 };
 
-export default ProfilePic;
+export default uploadProfilePic;

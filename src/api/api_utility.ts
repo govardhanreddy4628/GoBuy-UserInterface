@@ -17,7 +17,7 @@ export const getAccessToken = () => accessToken;
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true, // refresh cookie
-  timeout: 10000,
+  timeout: 30000,
 });
 
 // 🔥 Separate client for refresh
@@ -123,3 +123,24 @@ export const DELETE = <T = any>(
   url: string,
   config?: AxiosRequestConfig
 ) => api.delete<T>(url, config);
+
+
+
+
+
+
+
+
+// // example code for retry on timeout
+// const fetchProducts = async (retry = 2) => {
+//   try {
+//     const res = await GET("/api/v1/product/top-rated");
+//     return res.data;
+//   } catch (err: any) {
+//     if (err.code === "ECONNABORTED" && retry > 0) {
+//       console.log("Retrying...");
+//       return fetchProducts(retry - 1);
+//     }
+//     throw err;
+//   }
+// };

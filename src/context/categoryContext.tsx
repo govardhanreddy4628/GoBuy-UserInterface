@@ -19,6 +19,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   // 🧩 Convert "children" to "subcategories" recursively and normalize dates recursively
   const normalizeCategoryTree = (cat: any): Category => ({
     ...cat,
+    id: cat._id || cat.id, // ✅ normalize id
     subcategories: Array.isArray(cat.children)
       ? cat.children.map(normalizeCategoryTree)
       : [],
@@ -69,7 +70,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
     if (!Array.isArray(cats)) return null;
     for (const cat of cats) {
       if (!cat) continue;
-      if (String(cat.id) === String(id)) return cat;
+      if (String(cat.id || cat._id) === String(id)) return cat;
       const found = findCategoryById(id, cat.subcategories || []);
       if (found) return found;
     }

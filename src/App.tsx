@@ -2,20 +2,11 @@ import { lazy, Suspense } from 'react';
 import "./App.css"
 import { Routes, Route, Navigate } from "react-router-dom";
 // import { ThemeProvider } from '@mui/material';
-// import { theme } from './themes/theme';
-// import DrawCircle from './components/drawCircle';
-// import FaqComp from './components/FaqComp';
-// import FormikComponent from './move/formik';
-// import RegisterForm from './components/registrationForm';
-// import StarRating from './components/starRating';
-// import Sticky from './components/sticky/sticky';
-// import FormikFieldArray from './components/formArray';
 
 import { ThemeProvider } from './context/themeContext';
 //import NotFound from "./pages/NotFound";
 import BlogDetail from "./components/blogs/BlogDetails.tsx";
 import BlogSection from "./components/blogs/BlogSection.tsx";
-//import { Dashboard } from "./components/admin/DashBoard/dashboard.tsx";
 import { AuthProvider } from "./context/authContext";
 import AddressForm from "./components/addressForm";
 import OtpVerify from "./components/auth/otpVerify.tsx";
@@ -54,7 +45,6 @@ import TrackOrder from './pages/trackOrderPage.tsx';
 import PaymentPage from './pages/paymentPage.tsx';
 import { CategoryProvider } from './context/categoryContext.tsx';
 //import { ProductProvider } from "./components/admin/context/productsContext.tsx";
-//import Counter from "./move/counter.tsx";
 
 
 const App = () => {

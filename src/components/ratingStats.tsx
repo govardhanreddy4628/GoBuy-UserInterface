@@ -172,7 +172,7 @@ const RatingStats: React.FC<RatingStatsProps> = ({
         },
       });
 
-      if (!res.ok) { throw new Error("Failed to submit review") }
+      if (!res.data.ok) { throw new Error("Failed to submit review") }
       alert("Review submitted successfully");
 
       // Reset

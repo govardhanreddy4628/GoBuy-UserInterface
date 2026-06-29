@@ -1,7 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useAuth } from "../../context/authContext";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { PUT } from "../../api/api_utility";
 
 const MyProfile = () => {

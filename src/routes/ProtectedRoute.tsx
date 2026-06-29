@@ -1,4 +1,3 @@
-// // components/ProtectedRoute.tsx
 // import { Navigate, Outlet } from 'react-router-dom';
 // import Loader from '../ui/Loader';
 // import { useAuth } from '../hooks/useAuth';

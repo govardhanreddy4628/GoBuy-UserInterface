@@ -4,7 +4,6 @@ import "swiper/css/navigation";
 
 import InnerImageZoom from "react-inner-image-zoom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 
 import type { Swiper as SwiperType } from "swiper";
@@ -28,10 +27,8 @@ import { GET, POST } from "../api/api_utility";
 import ProductsSlider from "./productsSlider";
 import ProductQuickViewModal from "./ProductQuickViewModal";
 import AiChatModal from "./aiChatModal/aiChatModal";
-import { Product } from "./admin/types/databaseTypes";
 
 /* ================= TYPES ================= */
-
 interface Stats {
     averageRating: number;
     totalReviews: number;
@@ -72,7 +69,7 @@ interface IProduct {
     shortDescription: string;
     description?: string;
     category: string;
-    images: string[];
+    images: ProductImage[];
     specifications: Specification[];
     variants: Variant[];
 }
@@ -204,6 +201,8 @@ const ProductDetails2 = () => {
     const handleDecrease = () => {
         setQuantity(prev => Math.max(1, prev - 1));
     };
+
+    const handleSizeButtonChange = (idx: number) => {console.log(idx)}
 
     if (loading) return <div className="p-10">Loading...</div>;
     if (!product) return null;

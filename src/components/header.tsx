@@ -17,7 +17,7 @@ import { useAuth } from '../context/authContext';
 import { accountMenu } from '../data/accountMenu';
 import { useCart } from '../context/cartContext';
 import { useWishlist } from '../context/wishlistContext'; // ✅ new
-import { TypeAnimation } from 'react-type-animation';
+//import { TypeAnimation } from 'react-type-animation';
 import SearchBar from './smartSearch';
 import { GET } from '../api/api_utility';
 import { FaUserCircle } from "react-icons/fa";
@@ -25,18 +25,9 @@ import { useCategories } from '../context/categoryContext';
 
 
 const HIDDEN_SLUGS = ["miscellaneous"];
-interface Category {
-    name: string;
-    path: string;
-    subcategories: {
-        name: string;
-        children: string[];
-    }[];
-}
-
 
 const Header = () => {
-    const [isFocused, setIsFocused] = useState(false);
+    //const [isFocused, setIsFocused] = useState(false);
     const [open, setOpen] = useState(false);
     const [anchor, setAnchor] = useState<'left' | 'right'>('left');
     const [accanchorEl, setAccAnchorEl] = useState<null | HTMLElement>(null);
@@ -53,7 +44,7 @@ const Header = () => {
     const { categories, loading } = useCategories();
 
     const visibleCategories = categories.filter(
-        (cat) => cat.isActive && !HIDDEN_SLUGS.includes(cat.slug) && !cat.parentCategoryId
+        (cat) => cat.isActive !== false && !HIDDEN_SLUGS.includes(cat.slug || "") && !cat.parentCategoryId
     ) ?? [];
 
 

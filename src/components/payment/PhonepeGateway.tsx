@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Smartphone, CreditCard, Building2, ShieldCheck, Copy, Check, User, Lock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Smartphone, CreditCard, Building2, ShieldCheck, User, Lock } from "lucide-react";
+//import { Copy, Check } from "lucide-react";
 import QRCode from "qrcode";
 import { BankInfo, GatewayMethod } from "./payment";
 
@@ -37,7 +38,7 @@ const PhonepeGateway = ({ amount, merchantName = "Merchant", onProceedToPin, onB
   const [cardName, setCardName] = useState("");
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState("");
-  const [copiedField, setCopiedField] = useState<string | null>(null);
+  //const [copiedField, setCopiedField] = useState<string | null>(null);
   const [nbUserId, setNbUserId] = useState("");
   const [nbPassword, setNbPassword] = useState("");
 
@@ -67,11 +68,11 @@ const PhonepeGateway = ({ amount, merchantName = "Merchant", onProceedToPin, onB
     return digits;
   };
 
-  const copyToClipboard = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 1500);
-  };
+  // const copyToClipboard = (text: string, field: string) => {
+  //   navigator.clipboard.writeText(text);
+  //   setCopiedField(field);
+  //   setTimeout(() => setCopiedField(null), 1500);
+  // };
 
   const fillTestCard = () => {
     setCardNumber(TEST_CARD.number);

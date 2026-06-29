@@ -29,12 +29,8 @@ const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
 
-export const AuthProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+export const AuthProvider = ({children}: {children: React.ReactNode}) => {
+const [user, setUser] = useState<AuthUser | null>(null);
 const [isAuthLoading, setIsAuthLoading] = useState(true);
 const isAuthenticated = !!user; 
 
@@ -53,10 +49,10 @@ const isAuthenticated = !!user;
 
       try {
         const refreshRes = await api.get("/api/v1/user/auth/refresh");
-        const accessToken = refreshRes.data?.accessToken;
-        if (!accessToken) throw new Error("No access token");
+        const newAccessToken = refreshRes.data?.accessToken;
+        if (!newAccessToken) throw new Error("No access token");
 
-        setAccessToken(accessToken);
+        setAccessToken(newAccessToken);
 
         const meRes = await api.get("/api/v1/user/me");
         setUser(meRes.data?.user || null);
